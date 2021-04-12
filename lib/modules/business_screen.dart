@@ -1,40 +1,32 @@
+import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_app/layout/news_layout/cubit/cubit.dart';
+import 'package:news_app/layout/news_layout/cubit/states.dart';
+import 'package:news_app/shared/colors.dart';
+import 'package:news_app/shared/components.dart';
 
 class BusinessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(18),
-      child: Container(
-          height: MediaQuery.of(context).size.height / 5,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width / 2.4,
-                height: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  image: DecorationImage(
-                      image: NetworkImage('https://picsum.photos/250?image=9'), fit: BoxFit.cover),
+    NewsCubit.get(context).news.clear();
+    NewsCubit.get(context).getData(context);
+    return BlocConsumer<NewsCubit, NewsStates>(
+      listener: (BuildContext context, state) {},
+      builder: (BuildContext context, state) => ConditionalBuilder(
+        condition: NewsCubit.get(context).news.length > 0,
+        builder: (context) => ListView.separated(
+            itemBuilder: (context, index) =>
+                newsItemBuilder(context: context, articles: NewsCubit.get(context).news[index]),
+            separatorBuilder: (context, index) => Divider(
+                  color: primarySw,
+                  thickness: 1,
+                  indent: 15,
+                  endIndent: 15,
                 ),
-              ),
-              SizedBox(width: 5),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('title'),
-                    Text('publisher'),
-                    Text('description'),
-                    Spacer(),
-                    Text('date'),
-                  ],
-                ),
-              )
-            ],
-          ),
+            itemCount: NewsCubit.get(context).news.length),
+        fallback: (context) => Center(child: CircularProgressIndicator.adaptive()),
       ),
     );
   }

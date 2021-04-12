@@ -7,7 +7,7 @@ import 'package:news_app/layout/news_layout/cubit/states.dart';
 import 'package:news_app/shared/colors.dart';
 import 'package:news_app/shared/components.dart';
 
-class SportsScreen extends StatelessWidget {
+class PoliticsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     NewsCubit.get(context).news.clear();

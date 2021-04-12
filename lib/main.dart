@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_app/shared/bloc_observer.dart';
 import 'package:news_app/shared/colors.dart';
+import 'package:news_app/shared/network/remote/dio_helper.dart';
 import 'package:news_app/shared/styles.dart';
+
 import 'layout/news_layout/cubit/cubit.dart';
 import 'layout/news_layout/news_layout.dart';
 
 void main() {
+  Bloc.observer = MyBlocObserver();
+  DioHelper.dioInit();
   runApp(MyApp());
 }
 
