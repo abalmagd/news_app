@@ -8,10 +8,9 @@ import 'package:news_app/shared/styles.dart';
 
 //TODO: ADD PAGE VIEW
 class NewsLayout extends StatelessWidget {
-  /*final pageViewController = PageController(initialPage: 0);*/
-
   @override
   Widget build(BuildContext context) {
+    /*final pageViewController = PageController(initialPage: NewsCubit.get(context).bottomNavIndex);*/
     return BlocConsumer<NewsCubit, NewsStates>(
       listener: (context, state) {},
       builder: (context, state) => Scaffold(
@@ -22,7 +21,7 @@ class NewsLayout extends StatelessWidget {
           height: MediaQuery.of(context).size.height / 14,
           decoration: BoxDecoration(border: Border(top: BorderSide(color: primarySw, width: 1.5))),
           child: BottomNavigationBar(
-            type: BottomNavigationBarType.shifting,
+            type: BottomNavigationBarType.fixed,
             unselectedItemColor: Colors.grey,
             selectedItemColor: primarySw,
             showUnselectedLabels: true,
@@ -30,7 +29,7 @@ class NewsLayout extends StatelessWidget {
             currentIndex: NewsCubit.get(context).bottomNavIndex,
             onTap: (value) {
               NewsCubit.get(context).changeBottomNavIndex(value);
-              /*pageViewController.animateToPage(value, curve: null, duration: null);*/
+              /*pageViewController.jumpToPage(value);*/
             },
             items: [
               BottomNavigationBarItem(icon: Icon(Icons.business), label: 'Business'),
@@ -41,22 +40,24 @@ class NewsLayout extends StatelessWidget {
             ],
           ),
         ),
-        body: RefreshIndicator(
-          onRefresh: () => NewsCubit.get(context).getData(context),
-          child:
-              /*PageView(
-              controller: pageViewController,
-              onPageChanged: (index) => NewsCubit.get(context).changeBottomNavIndex(index),
-              children: [
-                NewsCubit.get(context).screenList[0],
-                NewsCubit.get(context).screenList[1],
-                NewsCubit.get(context).screenList[2],
-                NewsCubit.get(context).screenList[3],
-                NewsCubit.get(context).screenList[4],
-              ],
-            )*/
-              NewsCubit.get(context).screenList[NewsCubit.get(context).bottomNavIndex],
-        ),
+        body:
+            /*PageView(
+                controller: pageViewController,
+                onPageChanged: (index) {
+                  NewsCubit.get(context).news.clear();
+                  NewsCubit.get(context).changeBottomNavIndex(index);
+                  int num = NewsCubit.get(context).bottomNavIndex;
+                  print('PV INDEX: $index , CU INDEX: $num');
+                },
+                children: [
+                  BusinessScreen(),
+                  SportsScreen(),
+                  ScienceScreen(),
+                  PoliticsScreen(),
+                  SettingsScreen(),
+                ],
+              )*/
+            NewsCubit.get(context).screenList[NewsCubit.get(context).bottomNavIndex],
       ),
     );
   }

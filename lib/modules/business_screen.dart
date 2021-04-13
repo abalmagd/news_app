@@ -10,22 +10,24 @@ import 'package:news_app/shared/components.dart';
 class BusinessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    NewsCubit.get(context).news.clear();
     NewsCubit.get(context).getData(context);
     return BlocConsumer<NewsCubit, NewsStates>(
       listener: (BuildContext context, state) {},
       builder: (BuildContext context, state) => ConditionalBuilder(
         condition: NewsCubit.get(context).news.length > 0,
-        builder: (context) => ListView.separated(
-            itemBuilder: (context, index) =>
-                newsItemBuilder(context: context, articles: NewsCubit.get(context).news[index]),
-            separatorBuilder: (context, index) => Divider(
-                  color: primarySw,
-                  thickness: 1,
-                  indent: 15,
-                  endIndent: 15,
-                ),
-            itemCount: NewsCubit.get(context).news.length),
+        builder: (context) => RefreshIndicator(
+          onRefresh: () => NewsCubit.get(context).getData(context),
+          child: ListView.separated(
+              itemBuilder: (context, index) =>
+                  newsItemBuilder(context: context, articles: NewsCubit.get(context).news[index]),
+              separatorBuilder: (context, index) => Divider(
+                    color: primarySw,
+                    thickness: 1,
+                    indent: 15,
+                    endIndent: 15,
+                  ),
+              itemCount: NewsCubit.get(context).news.length),
+        ),
         fallback: (context) => Center(child: CircularProgressIndicator.adaptive()),
       ),
     );

@@ -10,7 +10,6 @@ import 'package:news_app/shared/components.dart';
 class ScienceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    NewsCubit.get(context).news.clear();
     NewsCubit.get(context).getData(context);
     return BlocConsumer<NewsCubit, NewsStates>(
       listener: (BuildContext context, state) {},

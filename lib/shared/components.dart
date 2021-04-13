@@ -21,7 +21,8 @@ Widget newsItemBuilder({
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
                 image: DecorationImage(
-                    image: CachedNetworkImageProvider(articles['urlToImage']),
+                    image: CachedNetworkImageProvider(articles['urlToImage'] ??
+                        'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'),
                     /*NetworkImage(articles['urlToImage'] ??
                         'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png')*/
                     fit: BoxFit.cover),
