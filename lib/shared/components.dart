@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/shared/styles.dart';
+
+import 'colors.dart';
 
 Widget newsItemBuilder({
   @required BuildContext context,
@@ -39,7 +42,8 @@ Widget newsItemBuilder({
                     style: articleTitleStyle,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Text(articles['source']['name'] ?? '', style: articlePublisherStyle),
+                  Text(articles['source']['name'] ?? '',
+                      style: articlePublisherStyle),
                   SizedBox(height: 20),
                   Text(
                     articles['description'] ?? '',
@@ -56,4 +60,20 @@ Widget newsItemBuilder({
           ],
         ),
       ),
+    );
+
+Widget newsBuilder({@required List list}) => ConditionalBuilder(
+      condition: list.length > 0,
+      builder: (context) => ListView.separated(
+          itemBuilder: (context, index) =>
+              newsItemBuilder(context: context, articles: list[index]),
+          separatorBuilder: (context, index) => Divider(
+                color: primarySw,
+                thickness: 1,
+                indent: 15,
+                endIndent: 15,
+              ),
+          itemCount: list.length),
+      fallback: (context) =>
+          Center(child: CircularProgressIndicator.adaptive()),
     );

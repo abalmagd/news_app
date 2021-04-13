@@ -4,22 +4,26 @@ class NewsInitialState extends NewsStates {}
 
 class BottomNavChangedState extends NewsStates {}
 
-class NewsLoadingState extends NewsStates {}
+class BusinessLoadingState extends NewsStates {}
 
-class NewsLoadingSuccessState extends NewsStates {}
-
-class NewsLoadingErrorState extends NewsStates {}
-
-/*
 class BusinessLoadingSuccessState extends NewsStates {}
+
 class BusinessLoadingErrorState extends NewsStates {}
 
+class ScienceLoadingState extends NewsStates {}
+
 class ScienceLoadingSuccessState extends NewsStates {}
+
 class ScienceLoadingErrorState extends NewsStates {}
 
+class SportsLoadingState extends NewsStates {}
+
 class SportsLoadingSuccessState extends NewsStates {}
+
 class SportsLoadingErrorState extends NewsStates {}
 
-class PoliticsLoadingSuccessState extends NewsStates {}
-class PoliticsLoadingErrorState extends NewsStates {}
-*/
+class HealthLoadingState extends NewsStates {}
+
+class HealthLoadingSuccessState extends NewsStates {}
+
+class HealthLoadingErrorState extends NewsStates {}
