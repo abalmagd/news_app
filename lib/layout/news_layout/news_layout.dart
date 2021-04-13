@@ -18,7 +18,9 @@ class NewsLayout extends StatelessWidget {
               title: Text(NewsCubit.get(context)
                   .screenTitles[NewsCubit.get(context).bottomNavIndex]),
               actions: [
-                IconButton(icon: Icon(Icons.search), onPressed: () {})
+                IconButton(icon: Icon(Icons.search), onPressed: () {}),
+                IconButton(
+                    icon: Icon(Icons.brightness_6_outlined), onPressed: () {}),
               ]),
           bottomNavigationBar: Container(
             height: MediaQuery.of(context).size.height / 14,
