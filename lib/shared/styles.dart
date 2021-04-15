@@ -12,3 +12,7 @@ const TextStyle articlePublisherStyle = TextStyle(fontSize: 14.0, fontWeight: Fo
 const TextStyle articleDescriptionStyle = TextStyle(fontSize: 16.0, height: 1.1, fontWeight: FontWeight.w300);
 
 const TextStyle articleDateStyle = TextStyle(fontSize: 12.0, color: Colors.grey);
+
+const TextStyle userNameStyle = TextStyle(fontSize: 22.0, fontWeight: FontWeight.w300, height: 3);
+
+const TextStyle changeCountryStyle = TextStyle(fontSize: 22.0, fontWeight: FontWeight.w300);

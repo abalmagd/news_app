@@ -26,8 +26,6 @@ Widget newsItemBuilder({
                 image: DecorationImage(
                     image: CachedNetworkImageProvider(articles['urlToImage'] ??
                         'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'),
-                    /*NetworkImage(articles['urlToImage'] ??
-                        'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png')*/
                     fit: BoxFit.cover),
               ),
             ),
@@ -63,10 +61,9 @@ Widget newsItemBuilder({
     );
 
 Widget newsBuilder({@required List list}) => ConditionalBuilder(
-      condition: list.length > 0,
+      condition: list != null /*.length > 0*/,
       builder: (context) => ListView.separated(
-          itemBuilder: (context, index) =>
-              newsItemBuilder(context: context, articles: list[index]),
+          itemBuilder: (context, index) => newsItemBuilder(context: context, articles: list[index]),
           separatorBuilder: (context, index) => Divider(
                 color: primarySw,
                 thickness: 1,

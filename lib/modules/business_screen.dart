@@ -8,6 +8,7 @@ import 'package:news_app/shared/components.dart';
 class BusinessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    NewsCubit.get(context).businessNews ?? NewsCubit.get(context).getBusiness();
     return BlocConsumer<NewsCubit, NewsStates>(
         listener: (BuildContext context, state) {},
         builder: (BuildContext context, state) => RefreshIndicator(

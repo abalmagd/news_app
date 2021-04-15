@@ -10,17 +10,15 @@ import 'package:news_app/shared/styles.dart';
 class NewsLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var pageViewController = PageController(initialPage: 0);
+    final pageViewController = PageController(initialPage: 0);
     return BlocConsumer<NewsCubit, NewsStates>(
       listener: (context, state) {},
       builder: (context, state) => Scaffold(
           appBar: AppBar(
-              title: Text(NewsCubit.get(context)
-                  .screenTitles[NewsCubit.get(context).bottomNavIndex]),
+              title: Text(NewsCubit.get(context).screenTitles[NewsCubit.get(context).bottomNavIndex]),
               actions: [
                 IconButton(icon: Icon(Icons.search), onPressed: () {}),
-                IconButton(
-                    icon: Icon(Icons.brightness_6_outlined), onPressed: () {}),
+                IconButton(icon: Icon(Icons.brightness_6_outlined), onPressed: () {}),
               ]),
           bottomNavigationBar: Container(
             height: MediaQuery.of(context).size.height / 14,
@@ -35,11 +33,12 @@ class NewsLayout extends StatelessWidget {
               currentIndex: NewsCubit.get(context).bottomNavIndex,
               onTap: (index) {
                 NewsCubit.get(context).changeBottomNavIndex(index);
-                pageViewController.animateToPage(
+                pageViewController.jumpToPage(index);
+                /*pageViewController.animateToPage(
                   index,
                   duration: Duration(seconds: 1),
                   curve: Curves.ease,
-                );
+                );*/
               },
               items: [
                 BottomNavigationBarItem(
