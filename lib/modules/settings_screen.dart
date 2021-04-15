@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:news_app/layout/news_layout/cubit/cubit.dart';
 import 'package:news_app/shared/colors.dart';
 import 'package:news_app/shared/styles.dart';
@@ -30,7 +31,19 @@ class SettingsScreen extends StatelessWidget {
           SizedBox(height: 20),
           ListTile(
               title: Text('Pick news country', style: changeCountryStyle),
-              trailing: DropdownButton<String>(
+              trailing: DropDown(
+                hint: Text('Country'),
+                items: NewsCubit.get(context).countries,
+                initialValue: NewsCubit.get(context)
+                    .countryCodes[NewsCubit.get(context).country],
+                onChanged: (item) {
+                  NewsCubit.get(context)
+                      .changeCountry(NewsCubit.get(context).countryCodes[item]);
+                },
+              )),
+
+          // Old DropDownButton
+          /*DropdownButton<String>(
                   value: NewsCubit.get(context).countryCodes[NewsCubit.get(context).country],
                   hint: Text('Country'),
                   onChanged: (item) {
@@ -41,7 +54,7 @@ class SettingsScreen extends StatelessWidget {
                       value: value,
                       child: Text(value),
                     );
-                  }).toList()))
+                  }).toList()))*/
         ],
       ),
     );
