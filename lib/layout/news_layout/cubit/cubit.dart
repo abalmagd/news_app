@@ -63,7 +63,7 @@ class NewsCubit extends Cubit<NewsStates> {
 
   void changeCountry(String value) {
     country = value;
-    print(country);
+    print('country from cubit: $country');
     getBusiness();
     getHealth();
     getSports();

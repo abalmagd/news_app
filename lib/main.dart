@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => NewsCubit()..getBusiness(),
+      create: (BuildContext context) => NewsCubit(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

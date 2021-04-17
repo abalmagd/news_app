@@ -6,8 +6,6 @@ class DioHelper {
 
   static dioInit() => dio = Dio(BaseOptions(
         baseUrl: 'https://newsapi.org/',
-        connectTimeout: 5000,
-        receiveTimeout: 5000,
         receiveDataWhenStatusError: true,
       ));
 
