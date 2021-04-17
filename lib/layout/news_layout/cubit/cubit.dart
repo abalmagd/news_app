@@ -1,9 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/layout/news_layout/cubit/states.dart';
 import 'package:news_app/modules/business_screen.dart';
 import 'package:news_app/modules/health_screen.dart';
 import 'package:news_app/modules/science_screen.dart';
+import 'package:news_app/modules/search_screen.dart';
 import 'package:news_app/modules/settings_screen.dart';
 import 'package:news_app/modules/sports_screen.dart';
 import 'package:news_app/shared/network/remote/dio_helper.dart';
@@ -16,6 +19,8 @@ class NewsCubit extends Cubit<NewsStates> {
   int bottomNavIndex = 0;
 
   String country = 'us';
+
+  IconData search = Icons.search;
 
   List<String> countries = [
     'Egypt',
@@ -41,6 +46,7 @@ class NewsCubit extends Cubit<NewsStates> {
     ScienceScreen(),
     HealthScreen(),
     SettingsScreen(),
+    SearchScreen(),
   ];
 
   List screenTitles = [
@@ -55,10 +61,16 @@ class NewsCubit extends Cubit<NewsStates> {
   List<dynamic> sportsNews;
   List<dynamic> scienceNews;
   List<dynamic> healthNews;
+  List<dynamic> searchNews;
 
   void changeBottomNavIndex(int value) {
     bottomNavIndex = value;
     emit(BottomNavChangedState());
+  }
+
+  void changeSearchIcon(IconData icon) {
+    search = icon;
+    emit(SearchState());
   }
 
   void changeCountry(String value) {
@@ -71,11 +83,33 @@ class NewsCubit extends Cubit<NewsStates> {
     emit(CountryChangedState());
   }
 
+  void getSearch(String searchQuery) {
+    emit(SearchLoadingState());
+    DioHelper.getData(
+      url: 'v2/everything',
+      query: {
+        'q': '$searchQuery',
+        'apiKey': 'b6c21e0ba459417e8ff250cf6e350b37'
+      },
+    ).then((response) {
+      searchNews = response.data['articles'];
+      print(searchNews);
+      emit(SearchLoadingSuccessState());
+    }).catchError((error) {
+      print(error.toString());
+      emit(SearchLoadingErrorState());
+    });
+  }
+
   void getBusiness() {
     emit(BusinessLoadingState());
     DioHelper.getData(
       url: 'v2/top-headlines',
-      query: {'country': country, 'category': 'business', 'apiKey': 'b6c21e0ba459417e8ff250cf6e350b37'},
+      query: {
+        'country': country,
+        'category': 'business',
+        'apiKey': 'b6c21e0ba459417e8ff250cf6e350b37'
+      },
     ).then((response) {
       businessNews = response.data['articles'];
       emit(BusinessLoadingSuccessState());
