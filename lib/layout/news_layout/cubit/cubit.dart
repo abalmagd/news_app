@@ -1,14 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/layout/news_layout/cubit/states.dart';
-import 'package:news_app/modules/business_screen.dart';
-import 'package:news_app/modules/health_screen.dart';
-import 'package:news_app/modules/science_screen.dart';
-import 'package:news_app/modules/search_screen.dart';
-import 'package:news_app/modules/settings_screen.dart';
-import 'package:news_app/modules/sports_screen.dart';
 import 'package:news_app/shared/network/remote/dio_helper.dart';
 
 class NewsCubit extends Cubit<NewsStates> {
@@ -19,8 +11,6 @@ class NewsCubit extends Cubit<NewsStates> {
   int bottomNavIndex = 0;
 
   String country = 'us';
-
-  IconData search = Icons.search;
 
   List<String> countries = [
     'Egypt',
@@ -39,15 +29,6 @@ class NewsCubit extends Cubit<NewsStates> {
     'Japan': 'jp',
     'Saudi Arabia': 'sa'
   };
-
-  List screenList = [
-    BusinessScreen(),
-    SportsScreen(),
-    ScienceScreen(),
-    HealthScreen(),
-    SettingsScreen(),
-    SearchScreen(),
-  ];
 
   List screenTitles = [
     'Business',
@@ -68,10 +49,7 @@ class NewsCubit extends Cubit<NewsStates> {
     emit(BottomNavChangedState());
   }
 
-  void changeSearchIcon(IconData icon) {
-    search = icon;
-    emit(SearchState());
-  }
+  void startSearch() => emit(SearchState());
 
   void changeCountry(String value) {
     country = value;
