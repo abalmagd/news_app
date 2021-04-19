@@ -13,6 +13,7 @@ class SearchLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isSearching = false;
+    NewsCubit.get(context).dbInit();
     return BlocConsumer<NewsCubit, NewsStates>(
         listener: (context, state) {},
         builder: (context, state) => Scaffold(
@@ -32,14 +33,21 @@ class SearchLayout extends StatelessWidget {
                     child: TextField(
                       onChanged: (text) {
                         if (text.isEmpty) {
+                          NewsCubit.get(context).searchNews.clear();
                           isSearching = false;
                           NewsCubit.get(context).emit(SearchState());
                         } else {
                           isSearching = true;
-                          // NewsCubit.get(context).getSearch(text);
                         }
                       },
-                      onSubmitted: (text) => NewsCubit.get(context).getSearch(text),
+                      onSubmitted: (text) {
+                        // ignore: unnecessary_statements
+                        NewsCubit.get(context).searchNews.isEmpty
+                            ? null
+                            : NewsCubit.get(context).searchNews.clear();
+                        isSearching = true;
+                        NewsCubit.get(context).getSearch(text);
+                      },
                       controller: NewsCubit.get(context).searchController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -50,6 +58,7 @@ class SearchLayout extends StatelessWidget {
                             onPressed: () {
                               NewsCubit.get(context).searchController.clear();
                               isSearching = false;
+                              NewsCubit.get(context).searchNews.clear();
                               NewsCubit.get(context).emit(SearchState());
                             }),
                       ),
@@ -74,12 +83,19 @@ class SearchLayout extends StatelessWidget {
                       Expanded(
                         child: ListView.separated(
                           itemBuilder: (context, index) => historyBuilder(
-                            textOnPressed: () {},
+                            textOnPressed: () {
+                              NewsCubit.get(context).searchController.text =
+                                  NewsCubit.get(context).searchHistory[index]['query'].toString();
+                              NewsCubit.get(context)
+                                  .getSearch(NewsCubit.get(context).searchHistory[index]['query'].toString());
+                              isSearching = true;
+                            },
                             buttonOnPressed: () {},
+                            index: index,
+                            context: context,
                           ),
-                          separatorBuilder: (context, index) =>
-                              Divider(thickness: 0.2, color: Colors.teal),
-                          itemCount: 10,
+                          separatorBuilder: (context, index) => Divider(thickness: 0.2, color: Colors.teal),
+                          itemCount: NewsCubit.get(context).searchHistory.length,
                         ),
                       ),
                     ],

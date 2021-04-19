@@ -6,6 +6,20 @@ class BottomNavChangedState extends NewsStates {}
 
 class CountryChangedState extends NewsStates {}
 
+//<editor-fold desc="DatabaseStates">
+class NewsInitDatabaseSuccessState extends NewsStates {}
+
+class NewsInitDatabaseErrorState extends NewsStates {}
+
+class NewsGetDatabaseSuccessState extends NewsStates {}
+
+class NewsGetDatabaseErrorState extends NewsStates {}
+
+class NewsInsertDatabaseSuccessState extends NewsStates {}
+
+class NewsInsertDatabaseErrorState extends NewsStates {}
+//</editor-fold>
+
 //<editor-fold desc="SearchStates">
 class SearchState extends NewsStates {}
 

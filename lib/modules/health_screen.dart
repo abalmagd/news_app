@@ -8,7 +8,6 @@ import 'package:news_app/shared/components.dart';
 class HealthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    NewsCubit.get(context).healthNews ?? NewsCubit.get(context).getHealth();
     return BlocConsumer<NewsCubit, NewsStates>(
         listener: (BuildContext context, state) {},
         builder: (BuildContext context, state) => RefreshIndicator(

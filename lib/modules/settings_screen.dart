@@ -13,6 +13,7 @@ class SettingsScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,6 +42,10 @@ class SettingsScreen extends StatelessWidget {
                   NewsCubit.get(context).changeCountry(NewsCubit.get(context).countryCodes[item]);
                 },
               )),
+          MaterialButton(
+            onPressed: () {},
+            child: Text('Clear search history', style: changeCountryStyle),
+          )
 
           // Old DropDownButton
           /*DropdownButton<String>(

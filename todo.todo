@@ -1,5 +1,5 @@
 - TODO:
     - Finish search:
-        - Attach sqflite to SearchLayout (Display search history)
+        - Fix sqflite Insert, Add, Delete
     - Finish theme
     - Fix DropdownButton

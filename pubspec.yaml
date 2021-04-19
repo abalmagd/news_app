@@ -30,7 +30,6 @@ dependencies:
   conditional_builder: ^1.0.2
   dio: ^4.0.0
   fluttertoast: ^8.0.3
-  webview_flutter: ^2.0.4
   flutter_dropdown: ^0.0.8
 
 
