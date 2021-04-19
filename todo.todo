@@ -1,6 +1,5 @@
-# TODO:
-- Finish search:
-    - Finish search_layout.dart
-    - Attach sqflite to SearchLayout (Display search history)
-- Finish theme
-- Fix DropdownButton
+- TODO:
+    - Finish search:
+        - Attach sqflite to SearchLayout (Display search history)
+    - Finish theme
+    - Fix DropdownButton

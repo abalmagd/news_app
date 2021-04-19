@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/layout/news_layout/cubit/states.dart';
 import 'package:news_app/shared/network/remote/dio_helper.dart';
@@ -11,6 +12,8 @@ class NewsCubit extends Cubit<NewsStates> {
   int bottomNavIndex = 0;
 
   String country = 'us';
+
+  TextEditingController searchController = TextEditingController();
 
   List<String> countries = [
     'Egypt',
@@ -44,12 +47,15 @@ class NewsCubit extends Cubit<NewsStates> {
   List<dynamic> healthNews;
   List<dynamic> searchNews;
 
+  bool checkSearchStatus() {
+    emit(SearchState());
+    return searchController.text.isEmpty;
+  }
+
   void changeBottomNavIndex(int value) {
     bottomNavIndex = value;
     emit(BottomNavChangedState());
   }
-
-  void startSearch() => emit(SearchState());
 
   void changeCountry(String value) {
     country = value;
@@ -71,7 +77,6 @@ class NewsCubit extends Cubit<NewsStates> {
       },
     ).then((response) {
       searchNews = response.data['articles'];
-      print(searchNews);
       emit(SearchLoadingSuccessState());
     }).catchError((error) {
       print(error.toString());

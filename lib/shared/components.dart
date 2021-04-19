@@ -71,6 +71,17 @@ Widget newsBuilder({@required List list}) => ConditionalBuilder(
                 endIndent: 15,
               ),
           itemCount: list.length),
-      fallback: (context) =>
-          Center(child: CircularProgressIndicator.adaptive()),
+      fallback: (context) => Center(child: CircularProgressIndicator.adaptive()),
+    );
+
+Widget historyBuilder({
+  @required Function() textOnPressed,
+  @required Function() buttonOnPressed,
+}) =>
+    Row(
+      children: [
+        TextButton(child: Text('YOOOOOOOOOOO'), onPressed: textOnPressed),
+        Spacer(),
+        IconButton(icon: Icon(Icons.close), onPressed: buttonOnPressed),
+      ],
     );
