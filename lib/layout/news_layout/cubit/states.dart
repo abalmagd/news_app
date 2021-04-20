@@ -18,6 +18,10 @@ class NewsGetDatabaseErrorState extends NewsStates {}
 class NewsInsertDatabaseSuccessState extends NewsStates {}
 
 class NewsInsertDatabaseErrorState extends NewsStates {}
+
+class NewsDeleteDatabaseSuccessState extends NewsStates {}
+
+class NewsDeleteDatabaseErrorState extends NewsStates {}
 //</editor-fold>
 
 //<editor-fold desc="SearchStates">

@@ -1,5 +1,4 @@
 - TODO:
-    - Finish search:
-        - Fix sqflite Insert, Add, Delete
+    - Try to fix getNews()
     - Finish theme
     - Fix DropdownButton

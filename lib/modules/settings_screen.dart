@@ -42,11 +42,6 @@ class SettingsScreen extends StatelessWidget {
                   NewsCubit.get(context).changeCountry(NewsCubit.get(context).countryCodes[item]);
                 },
               )),
-          MaterialButton(
-            onPressed: () {},
-            child: Text('Clear search history', style: changeCountryStyle),
-          )
-
           // Old DropDownButton
           /*DropdownButton<String>(
                   value: NewsCubit.get(context).countryCodes[NewsCubit.get(context).country],

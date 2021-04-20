@@ -21,7 +21,11 @@ class SearchLayout extends StatelessWidget {
                   leadingWidth: 30,
                   leading: IconButton(
                     icon: Icon(Icons.arrow_back),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      NewsCubit.get(context).database.close();
+                      NewsCubit.get(context).searchController.clear();
+                    },
                   ),
                   title: Container(
                     height: 34,
@@ -41,12 +45,12 @@ class SearchLayout extends StatelessWidget {
                         }
                       },
                       onSubmitted: (text) {
-                        // ignore: unnecessary_statements
-                        NewsCubit.get(context).searchNews.isEmpty
-                            ? null
-                            : NewsCubit.get(context).searchNews.clear();
+                        if (NewsCubit.get(context).searchNews.isNotEmpty) {
+                          NewsCubit.get(context).searchNews.clear();
+                        }
                         isSearching = true;
                         NewsCubit.get(context).getSearch(text);
+                        NewsCubit.get(context).dbInsert(text);
                       },
                       controller: NewsCubit.get(context).searchController,
                       decoration: InputDecoration(
@@ -85,12 +89,18 @@ class SearchLayout extends StatelessWidget {
                           itemBuilder: (context, index) => historyBuilder(
                             textOnPressed: () {
                               NewsCubit.get(context).searchController.text =
-                                  NewsCubit.get(context).searchHistory[index]['query'].toString();
-                              NewsCubit.get(context)
-                                  .getSearch(NewsCubit.get(context).searchHistory[index]['query'].toString());
+                                  NewsCubit.get(context)
+                                      .searchHistory[index]['query']
+                                      .toString();
+                              NewsCubit.get(context).getSearch(NewsCubit.get(context)
+                                  .searchHistory[index]['query']
+                                  .toString());
                               isSearching = true;
                             },
-                            buttonOnPressed: () {},
+                            buttonOnPressed: () {
+                              NewsCubit.get(context).dbDelete(
+                                  (NewsCubit.get(context).searchHistory[index]['id']));
+                            },
                             index: index,
                             context: context,
                           ),

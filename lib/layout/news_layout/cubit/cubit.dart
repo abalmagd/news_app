@@ -75,9 +75,7 @@ class NewsCubit extends Cubit<NewsStates> {
       },
       onOpen: (db) async {
         print('db opened');
-        await db.rawQuery('SELECT * FROM Search').then((value) => searchHistory = value).catchError((error) {
-          print(error);
-        });
+        dbGet(db);
       },
     ).then((value) {
       database = value;
@@ -89,29 +87,44 @@ class NewsCubit extends Cubit<NewsStates> {
   }
 
   void dbInsert(String searchQuery) async {
-    await database.transaction((txn) async {
-      await txn.rawInsert('INSERT INTO Search(query) VALUES(?)', [searchQuery]);
+    bool repeated = false;
+    searchHistory.forEach((element) {
+      if (element['query'] == searchQuery) repeated = true;
+    });
+    if (!repeated) {
+      await database.transaction((txn) async {
+        await txn.rawInsert('INSERT INTO Search(query) VALUES(?)', [searchQuery]);
+      }).then((value) async {
+        dbGet(database);
+        emit(NewsInsertDatabaseSuccessState());
+      }).catchError((error) {
+        print(error);
+        emit(NewsInsertDatabaseErrorState());
+      });
+    }
+  }
+
+  void dbGet(Database db) async {
+    await db.rawQuery('SELECT * FROM Search').then((value) {
+      searchHistory = value;
+      emit(NewsGetDatabaseSuccessState());
     }).catchError((error) {
       print(error);
-    });
-
-    await database
-        .rawQuery('SELECT * FROM Search')
-        .then((value) => searchHistory = value)
-        .catchError((error) {
-      print(error);
+      emit(NewsGetDatabaseErrorState());
     });
   }
 
   void dbDelete(int id) async {
     await database.rawDelete('DELETE FROM Search WHERE id = ?', [id]).then((value) async {
-      await database
-          .rawQuery('SELECT * FROM Search')
-          .then((value) => searchHistory = value)
-          .catchError((error) {
-        print(error);
-      });
+      dbGet(database);
+      emit(NewsDeleteDatabaseSuccessState());
+    }).catchError((error) {
+      emit(NewsDeleteDatabaseErrorState());
     });
+  }
+
+  void dbClear() async {
+    await database.delete('Search');
   }
 
   void getSearch(String searchQuery) {
