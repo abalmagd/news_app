@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_app/layout/news_layout/cubit/states.dart';
 import 'package:news_app/shared/bloc_observer.dart';
 import 'package:news_app/shared/colors.dart';
 import 'package:news_app/shared/network/remote/dio_helper.dart';
@@ -25,27 +26,44 @@ class MyApp extends StatelessWidget {
         ..getSports()
         ..getScience()
         ..getHealth(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          brightness: Brightness.light,
-          primarySwatch: primarySw,
-          appBarTheme: AppBarTheme(
-            titleSpacing: 18,
-            backgroundColor: Colors.transparent,
-            elevation: 0.0,
-            titleTextStyle: appBarTextStyle,
-            iconTheme: IconThemeData(
-              color: Colors.black,
-            ),
-            backwardsCompatibility: false,
-            systemOverlayStyle: SystemUiOverlayStyle(
-              statusBarColor: Colors.transparent,
-              statusBarIconBrightness: Brightness.dark,
+      child: BlocConsumer<NewsCubit, NewsStates>(
+        listener: (context, state) {},
+        builder: (context, state) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          themeMode: NewsCubit.get(context).themeMode ? ThemeMode.light : ThemeMode.dark,
+          theme: ThemeData(
+            primarySwatch: primarySw,
+            appBarTheme: AppBarTheme(
+              titleSpacing: 18,
+              backgroundColor: Colors.transparent,
+              elevation: 0.0,
+              titleTextStyle: appBarTextStyle,
+              backwardsCompatibility: false,
+              iconTheme: IconThemeData(color: Colors.black),
+              systemOverlayStyle: SystemUiOverlayStyle(
+                statusBarColor: Colors.transparent,
+                statusBarIconBrightness: Brightness.dark,
+              ),
             ),
           ),
+          darkTheme: ThemeData(
+            primarySwatch: primarySw,
+            brightness: Brightness.dark,
+            scaffoldBackgroundColor: Colors.grey[900],
+            iconTheme: IconThemeData(color: Colors.white),
+            appBarTheme: AppBarTheme(
+              color: Colors.grey[900],
+              titleSpacing: 18,
+              elevation: 0.0,
+              backwardsCompatibility: false,
+              systemOverlayStyle: SystemUiOverlayStyle(
+                statusBarColor: Colors.transparent,
+                statusBarIconBrightness: Brightness.light,
+              ),
+            ),
+          ),
+          home: NewsLayout(),
         ),
-        home: NewsLayout(),
       ),
     );
   }

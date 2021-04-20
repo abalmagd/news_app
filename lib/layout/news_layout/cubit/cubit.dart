@@ -10,22 +10,19 @@ class NewsCubit extends Cubit<NewsStates> {
   NewsCubit() : super(NewsInitialState());
 
   static NewsCubit get(context) => BlocProvider.of(context);
-  Database database;
 
+  Database database;
+  bool isSearching = false;
+  String groupApiKey = '65f7f556ec76449fa7dc7c0069f040ca';
+  String myApiKey = 'b6c21e0ba459417e8ff250cf6e350b37';
   int bottomNavIndex = 0;
+
+  // false = white & true = dark
+  bool themeMode = false;
+
   TextEditingController searchController = TextEditingController();
 
-  //<editor-fold desc="Country">
   String country = 'us';
-
-  List<String> countries = [
-    'Egypt',
-    'USA',
-    'UAE',
-    'France',
-    'Japan',
-    'Saudi Arabia',
-  ];
 
   Map<String, String> countryCodes = {
     'Egypt': 'eg',
@@ -44,14 +41,17 @@ class NewsCubit extends Cubit<NewsStates> {
     'Settings',
   ];
 
-  //</editor-fold>
-
   List<dynamic> businessNews = [];
   List<dynamic> sportsNews = [];
   List<dynamic> scienceNews = [];
   List<dynamic> healthNews = [];
   List<dynamic> searchNews = [];
   List<Map> searchHistory = [];
+
+  void changeTheme() {
+    themeMode ? themeMode = false : themeMode = true;
+    emit(NewsThemeChangedState());
+  }
 
   void changeCountry(String value) {
     country = value;
@@ -86,6 +86,16 @@ class NewsCubit extends Cubit<NewsStates> {
     });
   }
 
+  void dbGet(Database db) async {
+    await db.rawQuery('SELECT * FROM Search').then((value) {
+      searchHistory = value;
+      emit(NewsGetDatabaseSuccessState());
+    }).catchError((error) {
+      print(error);
+      emit(NewsGetDatabaseErrorState());
+    });
+  }
+
   void dbInsert(String searchQuery) async {
     bool repeated = false;
     searchHistory.forEach((element) {
@@ -104,16 +114,6 @@ class NewsCubit extends Cubit<NewsStates> {
     }
   }
 
-  void dbGet(Database db) async {
-    await db.rawQuery('SELECT * FROM Search').then((value) {
-      searchHistory = value;
-      emit(NewsGetDatabaseSuccessState());
-    }).catchError((error) {
-      print(error);
-      emit(NewsGetDatabaseErrorState());
-    });
-  }
-
   void dbDelete(int id) async {
     await database.rawDelete('DELETE FROM Search WHERE id = ?', [id]).then((value) async {
       dbGet(database);
@@ -123,15 +123,16 @@ class NewsCubit extends Cubit<NewsStates> {
     });
   }
 
-  void dbClear() async {
-    await database.delete('Search');
+  void changeBottomNavIndex(int value) {
+    bottomNavIndex = value;
+    emit(BottomNavChangedState());
   }
 
   void getSearch(String searchQuery) {
     emit(SearchLoadingState());
     DioHelper.getData(
       url: 'v2/everything',
-      query: {'q': '$searchQuery', 'apiKey': 'b6c21e0ba459417e8ff250cf6e350b37'},
+      query: {'q': '$searchQuery', 'apiKey': groupApiKey},
     ).then((response) {
       searchNews = response.data['articles'];
       emit(SearchLoadingSuccessState());
@@ -141,11 +142,6 @@ class NewsCubit extends Cubit<NewsStates> {
     });
   }
 
-  void changeBottomNavIndex(int value) {
-    bottomNavIndex = value;
-    emit(BottomNavChangedState());
-  }
-
   void getBusiness() {
     emit(BusinessLoadingState());
     DioHelper.getData(
@@ -153,7 +149,7 @@ class NewsCubit extends Cubit<NewsStates> {
       query: {
         'country': country,
         'category': 'business',
-        'apiKey': 'b6c21e0ba459417e8ff250cf6e350b37',
+        'apiKey': groupApiKey,
       },
     ).then((response) {
       businessNews = response.data['articles'];
@@ -168,7 +164,11 @@ class NewsCubit extends Cubit<NewsStates> {
     emit(SportsLoadingState());
     DioHelper.getData(
       url: 'v2/top-headlines',
-      query: {'country': country, 'category': 'sports', 'apiKey': 'b6c21e0ba459417e8ff250cf6e350b37'},
+      query: {
+        'country': country,
+        'category': 'sports',
+        'apiKey': groupApiKey,
+      },
     ).then((response) {
       sportsNews = response.data['articles'];
       emit(SportsLoadingSuccessState());
@@ -182,7 +182,11 @@ class NewsCubit extends Cubit<NewsStates> {
     emit(ScienceLoadingState());
     DioHelper.getData(
       url: 'v2/top-headlines',
-      query: {'country': country, 'category': 'science', 'apiKey': 'b6c21e0ba459417e8ff250cf6e350b37'},
+      query: {
+        'country': country,
+        'category': 'science',
+        'apiKey': groupApiKey,
+      },
     ).then((response) {
       scienceNews = response.data['articles'];
       emit(ScienceLoadingSuccessState());
@@ -196,7 +200,11 @@ class NewsCubit extends Cubit<NewsStates> {
     emit(HealthLoadingState());
     DioHelper.getData(
       url: 'v2/top-headlines',
-      query: {'country': country, 'category': 'health', 'apiKey': 'b6c21e0ba459417e8ff250cf6e350b37'},
+      query: {
+        'country': country,
+        'category': 'health',
+        'apiKey': groupApiKey,
+      },
     ).then((response) {
       healthNews = response.data['articles'];
       emit(HealthLoadingSuccessState());

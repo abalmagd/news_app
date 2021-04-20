@@ -6,14 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/layout/news_layout/cubit/cubit.dart';
 import 'package:news_app/layout/news_layout/cubit/states.dart';
 import 'package:news_app/modules/search_screen.dart';
+import 'package:news_app/shared/colors.dart';
 import 'package:news_app/shared/components.dart';
 import 'package:news_app/shared/styles.dart';
 
 class SearchLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    bool isSearching = false;
-    NewsCubit.get(context).dbInit();
     return BlocConsumer<NewsCubit, NewsStates>(
         listener: (context, state) {},
         builder: (context, state) => Scaffold(
@@ -30,7 +29,6 @@ class SearchLayout extends StatelessWidget {
                   title: Container(
                     height: 34,
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
                       border: Border.all(color: Colors.grey[400]),
                       borderRadius: BorderRadius.circular(40),
                     ),
@@ -38,17 +36,17 @@ class SearchLayout extends StatelessWidget {
                       onChanged: (text) {
                         if (text.isEmpty) {
                           NewsCubit.get(context).searchNews.clear();
-                          isSearching = false;
+                          NewsCubit.get(context).isSearching = false;
                           NewsCubit.get(context).emit(SearchState());
                         } else {
-                          isSearching = true;
+                          NewsCubit.get(context).isSearching = true;
                         }
                       },
                       onSubmitted: (text) {
                         if (NewsCubit.get(context).searchNews.isNotEmpty) {
                           NewsCubit.get(context).searchNews.clear();
                         }
-                        isSearching = true;
+                        NewsCubit.get(context).isSearching = true;
                         NewsCubit.get(context).getSearch(text);
                         NewsCubit.get(context).dbInsert(text);
                       },
@@ -61,7 +59,7 @@ class SearchLayout extends StatelessWidget {
                             icon: Icon(Icons.close, size: 17),
                             onPressed: () {
                               NewsCubit.get(context).searchController.clear();
-                              isSearching = false;
+                              NewsCubit.get(context).isSearching = false;
                               NewsCubit.get(context).searchNews.clear();
                               NewsCubit.get(context).emit(SearchState());
                             }),
@@ -71,11 +69,11 @@ class SearchLayout extends StatelessWidget {
                   actions: [
                     IconButton(
                       icon: Icon(Icons.brightness_6_outlined),
-                      onPressed: () {},
+                      onPressed: () => NewsCubit.get(context).changeTheme(),
                     )
                   ]),
               body: ConditionalBuilder(
-                condition: isSearching,
+                condition: NewsCubit.get(context).isSearching,
                 builder: (context) => SearchScreen(),
                 fallback: (context) => Padding(
                   padding: const EdgeInsets.all(15),
@@ -83,7 +81,7 @@ class SearchLayout extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Search History', style: searchHistoryStyle),
-                      Divider(thickness: 1, color: Colors.teal),
+                      Divider(thickness: 1, color: primarySw),
                       Expanded(
                         child: ListView.separated(
                           itemBuilder: (context, index) => historyBuilder(
@@ -95,7 +93,7 @@ class SearchLayout extends StatelessWidget {
                               NewsCubit.get(context).getSearch(NewsCubit.get(context)
                                   .searchHistory[index]['query']
                                   .toString());
-                              isSearching = true;
+                              NewsCubit.get(context).isSearching = true;
                             },
                             buttonOnPressed: () {
                               NewsCubit.get(context).dbDelete(
@@ -104,7 +102,8 @@ class SearchLayout extends StatelessWidget {
                             index: index,
                             context: context,
                           ),
-                          separatorBuilder: (context, index) => Divider(thickness: 0.2, color: Colors.teal),
+                          separatorBuilder: (context, index) =>
+                              Divider(thickness: 0.2, color: primarySw),
                           itemCount: NewsCubit.get(context).searchHistory.length,
                         ),
                       ),

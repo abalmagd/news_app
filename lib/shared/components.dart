@@ -10,7 +10,7 @@ import 'colors.dart';
 Widget newsItemBuilder({
   @required BuildContext context,
   @required dynamic articles,
-  Function onPressed,
+  Function() onPressed,
 }) =>
     Padding(
       padding: EdgeInsets.all(18),
@@ -54,16 +54,61 @@ Widget newsItemBuilder({
                 ],
               ),
             ),
-            IconButton(icon: Icon(Icons.open_in_new), onPressed: onPressed)
+            IconButton(
+              icon: Icon(Icons.open_in_new),
+              onPressed: () => showModalBottomSheet(
+                  context: context,
+                  builder: (context) => bottomSheetBuilder(context, articles)),
+            )
           ],
         ),
       ),
     );
 
+Widget bottomSheetBuilder(BuildContext context, dynamic articles) => Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 120,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              image: DecorationImage(
+                  image: CachedNetworkImageProvider(articles['urlToImage'] ??
+                      'https://reactnativecode.com/wp-content/uploads/2018/02/Default_Image_Thumbnail.png'),
+                  fit: BoxFit.cover),
+            ),
+          ),
+          SizedBox(height: 10),
+          Text(
+            articles['title'] ?? '',
+            maxLines: 2,
+            style: articleTitleStyle,
+            overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(height: 10),
+          Text('Publisher: ' + articles['source']['name'] ?? '',
+              style: articlePublisherStyle),
+          SizedBox(height: 20),
+          Text(
+            articles['description'] ?? '',
+            style: articleDescriptionStyle,
+          ),
+          SizedBox(height: 20),
+          Text(
+            articles['content'] ?? '',
+            style: articleDescriptionStyle,
+          ),
+        ],
+      ),
+    );
+
 Widget newsBuilder({@required List list}) => ConditionalBuilder(
-  condition: list.length > 0,
+      condition: list.length > 0,
       builder: (context) => ListView.separated(
-          itemBuilder: (context, index) => newsItemBuilder(context: context, articles: list[index]),
+          itemBuilder: (context, index) =>
+              newsItemBuilder(context: context, articles: list[index]),
           separatorBuilder: (context, index) => Divider(
                 color: primarySw,
                 thickness: 1,
