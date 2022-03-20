@@ -1,15 +1,16 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news_app/layout/news_layout/cubit/states.dart';
-import 'package:news_app/shared/network/remote/dio_helper.dart';
 import 'package:sqflite/sqflite.dart';
 
-class NewsCubit extends Cubit<NewsStates> {
-  NewsCubit() : super(NewsInitialState());
+import '../core/network/remote/dio_helper.dart';
+import 'app_states.dart';
 
-  static NewsCubit get(context) => BlocProvider.of(context);
+
+class AppCubit extends Cubit<AppStates> {
+  AppCubit() : super(NewsInitialState());
+
+  static AppCubit get(context) => BlocProvider.of(context);
 
   Database database;
   bool isSearching = false;
@@ -17,7 +18,8 @@ class NewsCubit extends Cubit<NewsStates> {
   String myApiKey = 'b6c21e0ba459417e8ff250cf6e350b37';
   int bottomNavIndex = 0;
 
-  // false = white & true = dark
+  // false = white
+  // true = dark
   bool themeMode = false;
 
   TextEditingController searchController = TextEditingController();
@@ -142,7 +144,7 @@ class NewsCubit extends Cubit<NewsStates> {
     });
   }
 
-  void getBusiness() {
+  Future<void> getBusiness() async {
     emit(BusinessLoadingState());
     DioHelper.getData(
       url: 'v2/top-headlines',

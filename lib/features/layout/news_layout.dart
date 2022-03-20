@@ -1,54 +1,52 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news_app/layout/news_layout/cubit/cubit.dart';
-import 'package:news_app/layout/news_layout/cubit/states.dart';
-import 'package:news_app/layout/search_layout/search_layout.dart';
-import 'package:news_app/modules/business_screen.dart';
-import 'package:news_app/modules/health_screen.dart';
-import 'package:news_app/modules/science_screen.dart';
-import 'package:news_app/modules/settings_screen.dart';
-import 'package:news_app/modules/sports_screen.dart';
-import 'package:news_app/shared/colors.dart';
-import 'package:news_app/shared/styles.dart';
+import 'package:news_app/features/layout/search_layout.dart';
+
+import '../../bloc/app_cubit.dart';
+import '../../bloc/app_states.dart';
+import '../business_screen.dart';
+import '../health_screen.dart';
+import '../science_screen.dart';
+import '../settings_screen.dart';
+import '../sports_screen.dart';
 
 class NewsLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageViewController = PageController(initialPage: 0);
-    return BlocConsumer<NewsCubit, NewsStates>(
+    return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) => Scaffold(
         appBar: AppBar(
             bottom: PreferredSize(
-                child: Container(color: primarySw, height: 2.0),
+                child: Container(color: Colors.teal, height: 2.0),
                 preferredSize: Size.fromHeight(2.0)),
-            title: Text(NewsCubit.get(context)
-                .screenTitles[NewsCubit.get(context).bottomNavIndex]),
+            title: Text(AppCubit.get(context)
+                .screenTitles[AppCubit.get(context).bottomNavIndex]),
             actions: [
               IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () {
                     Navigator.push(
                         context, MaterialPageRoute(builder: (context) => SearchLayout()));
-                    NewsCubit.get(context).dbInit();
-                    NewsCubit.get(context).emit(SearchState());
+                    AppCubit.get(context).dbInit();
+                    AppCubit.get(context).emit(SearchState());
                   }),
               IconButton(
                   icon: Icon(Icons.brightness_6_outlined),
-                  onPressed: () => NewsCubit.get(context).changeTheme()),
+                  onPressed: () => AppCubit.get(context).changeTheme()),
             ]),
         bottomNavigationBar: Container(
           height: MediaQuery.of(context).size.height / 14,
           decoration: BoxDecoration(
-              border: Border(top: BorderSide(color: primarySw, width: 1.5))),
+              border: Border(top: BorderSide(color: Colors.teal, width: 1.5))),
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             unselectedItemColor: Colors.grey,
-            selectedItemColor: primarySw,
+            selectedItemColor: Colors.teal,
             showUnselectedLabels: true,
-            selectedLabelStyle: bottomNavTextStyle,
-            currentIndex: NewsCubit.get(context).bottomNavIndex,
+            // selectedLabelStyle: bottomNavTextStyle, // TODO
+            currentIndex: AppCubit.get(context).bottomNavIndex,
             onTap: (index) => pageViewController.jumpToPage(index),
             items: [
               BottomNavigationBarItem(icon: Icon(Icons.business), label: 'Business'),
@@ -64,7 +62,7 @@ class NewsLayout extends StatelessWidget {
         ),
         body: PageView(
           controller: pageViewController,
-          onPageChanged: (index) => NewsCubit.get(context).changeBottomNavIndex(index),
+          onPageChanged: (index) => AppCubit.get(context).changeBottomNavIndex(index),
           children: [
             BusinessScreen(),
             SportsScreen(),

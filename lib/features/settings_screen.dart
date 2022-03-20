@@ -1,9 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:news_app/layout/news_layout/cubit/cubit.dart';
-import 'package:news_app/shared/colors.dart';
-import 'package:news_app/shared/styles.dart';
+
+import '../bloc/app_cubit.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -24,26 +22,26 @@ class SettingsScreen extends StatelessWidget {
                 radius: 40,
               ),
               SizedBox(width: 15),
-              Text('Mahmoud Abulmagd', style: userNameStyle),
+              Text('Mahmoud Abulmagd', /*style: userNameStyle TODO*/),
             ],
           ),
           SizedBox(height: 10),
-          Divider(color: primarySw, thickness: 1),
+          Divider(color: Colors.teal, thickness: 1),
           SizedBox(height: 20),
           ListTile(
-              title: Text('Pick news country', style: changeCountryStyle),
+              title: Text('Pick news country', /*style: changeCountryStyle TODO*/),
               trailing: DropdownButton<String>(
-                  // NewsCubit.get(context).countryCodes[NewsCubit.get(context).country]
-                  value: NewsCubit.get(context).countryCodes.keys.firstWhere(
+                  // AppCubit.get(context).countryCodes[NewsCubit.get(context).country]
+                  value: AppCubit.get(context).countryCodes.keys.firstWhere(
                       (k) =>
-                          NewsCubit.get(context).countryCodes[k] ==
-                          NewsCubit.get(context).country,
+                          AppCubit.get(context).countryCodes[k] ==
+                          AppCubit.get(context).country,
                       orElse: () => null),
                   onChanged: (item) {
-                    NewsCubit.get(context)
-                        .changeCountry(NewsCubit.get(context).countryCodes[item]);
+                    AppCubit.get(context).changeCountry(
+                        AppCubit.get(context).countryCodes[item]);
                   },
-                  items: NewsCubit.get(context).countryCodes.keys.map((value) {
+                  items: AppCubit.get(context).countryCodes.keys.map((value) {
                     return DropdownMenuItem(
                       value: value,
                       child: Text(value),
