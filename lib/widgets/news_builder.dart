@@ -65,7 +65,7 @@ class NewsBuilder extends StatelessWidget {
                         icon: Icon(Icons.open_in_new),
                         onPressed: () => showModalBottomSheet(
                             context: context,
-                            builder: (context) => BottomSheetBuilder(articles: articles)),
+                            builder: (context) => BottomSheetBuilder(articles: articles[index])),
                       )
                     ],
                   ),

@@ -1,29 +1,29 @@
 abstract class AppStates {}
 
-class NewsInitialState extends AppStates {}
+class InitialState extends AppStates {}
 
 class BottomNavChangedState extends AppStates {}
 
 class CountryChangedState extends AppStates {}
 
-class NewsThemeChangedState extends AppStates {}
+class ThemeChangedState extends AppStates {}
 
 //<editor-fold desc="DatabaseStates">
-class NewsInitDatabaseSuccessState extends AppStates {}
+class InitDatabaseSuccessState extends AppStates {}
 
-class NewsInitDatabaseErrorState extends AppStates {}
+class InitDatabaseErrorState extends AppStates {}
 
-class NewsGetDatabaseSuccessState extends AppStates {}
+class GetDatabaseSuccessState extends AppStates {}
 
-class NewsGetDatabaseErrorState extends AppStates {}
+class GetDatabaseErrorState extends AppStates {}
 
-class NewsInsertDatabaseSuccessState extends AppStates {}
+class InsertDatabaseSuccessState extends AppStates {}
 
-class NewsInsertDatabaseErrorState extends AppStates {}
+class InsertDatabaseErrorState extends AppStates {}
 
-class NewsDeleteDatabaseSuccessState extends AppStates {}
+class DeleteDatabaseSuccessState extends AppStates {}
 
-class NewsDeleteDatabaseErrorState extends AppStates {}
+class DeleteDatabaseErrorState extends AppStates {}
 //</editor-fold>
 
 //<editor-fold desc="SearchStates">

@@ -8,7 +8,7 @@ import 'app_states.dart';
 
 
 class AppCubit extends Cubit<AppStates> {
-  AppCubit() : super(NewsInitialState());
+  AppCubit() : super(InitialState());
 
   static AppCubit get(context) => BlocProvider.of(context);
 
@@ -52,7 +52,7 @@ class AppCubit extends Cubit<AppStates> {
 
   void changeTheme() {
     themeMode ? themeMode = false : themeMode = true;
-    emit(NewsThemeChangedState());
+    emit(ThemeChangedState());
   }
 
   void changeCountry(String value) {
@@ -81,20 +81,20 @@ class AppCubit extends Cubit<AppStates> {
       },
     ).then((value) {
       database = value;
-      emit(NewsInitDatabaseSuccessState());
+      emit(InitDatabaseSuccessState());
     }).catchError((error) {
       print(error);
-      emit(NewsInitDatabaseErrorState());
+      emit(InitDatabaseErrorState());
     });
   }
 
   void dbGet(Database db) async {
     await db.rawQuery('SELECT * FROM Search').then((value) {
       searchHistory = value;
-      emit(NewsGetDatabaseSuccessState());
+      emit(GetDatabaseSuccessState());
     }).catchError((error) {
       print(error);
-      emit(NewsGetDatabaseErrorState());
+      emit(GetDatabaseErrorState());
     });
   }
 
@@ -108,10 +108,10 @@ class AppCubit extends Cubit<AppStates> {
         await txn.rawInsert('INSERT INTO Search(query) VALUES(?)', [searchQuery]);
       }).then((value) async {
         dbGet(database);
-        emit(NewsInsertDatabaseSuccessState());
+        emit(InsertDatabaseSuccessState());
       }).catchError((error) {
         print(error);
-        emit(NewsInsertDatabaseErrorState());
+        emit(InsertDatabaseErrorState());
       });
     }
   }
@@ -119,9 +119,9 @@ class AppCubit extends Cubit<AppStates> {
   void dbDelete(int id) async {
     await database.rawDelete('DELETE FROM Search WHERE id = ?', [id]).then((value) async {
       dbGet(database);
-      emit(NewsDeleteDatabaseSuccessState());
+      emit(DeleteDatabaseSuccessState());
     }).catchError((error) {
-      emit(NewsDeleteDatabaseErrorState());
+      emit(DeleteDatabaseErrorState());
     });
   }
 
