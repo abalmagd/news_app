@@ -16,6 +16,7 @@ class HistoryBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = AppCubit.get(context);
     return Container(
       height: 40,
       child: Row(
@@ -29,7 +30,7 @@ class HistoryBuilder extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    AppCubit.get(context)
+                    cubit
                         .searchHistory[index]['query']
                         .toString(),
                     textAlign: TextAlign.start,
